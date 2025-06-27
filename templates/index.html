@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Crop Recommender 🌾</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to bottom right, #e0ffe0, #f0fff0);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #2f6b2f;
+      margin-bottom: 20px;
+    }
+
+    .form-container {
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      padding: 30px;
+      max-width: 500px;
+      width: 100%;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    input {
+      padding: 12px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #388e3c;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 1.3rem;
+      color: #1a4d1a;
+      font-weight: bold;
+    }
+
+    .illustration {
+      width: 100%;
+      max-width: 500px;
+      margin-top: 25px;
+    }
+
+    .footer {
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌿 Smart Crop Recommender</h1>
+
+  <img src="https://cdn-icons-png.flaticon.com/512/2909/2909761.png" alt="Crop Illustration" class="illustration">
+
+  <div class="form-container">
+    <form id="cropForm">
+      <input type="number" name="nitrogen" placeholder="Nitrogen (N)" required />
+      <input type="number" name="phosphorus" placeholder="Phosphorus (P)" required />
+      <input type="number" name="potassium" placeholder="Potassium (K)" required />
+      <input type="number" name="temperature" placeholder="Temperature (°C)" required />
+      <input type="number" name="humidity" placeholder="Humidity (%)" required />
+      <input type="number" name="ph" placeholder="pH level" required />
+      <input type="number" name="rainfall" placeholder="Rainfall (mm)" required />
+      <button type="submit">🌾 Predict Best Crop</button>
+    </form>
+    <div id="result"></div>
+  </div>
+
+  <div class="footer">
+    Made with 💚 for Indian Agriculture • 2025
+  </div>
+
+  <script>
+    document.getElementById("cropForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+        nitrogen: form.nitrogen.value,
+        phosphorus: form.phosphorus.value,
+        potassium: form.potassium.value,
+        temperature: form.temperature.value,
+        humidity: form.humidity.value,
+        ph: form.ph.value,
+        rainfall: form.rainfall.value
+      };
+
+      const res = await fetch("http://127.0.0.1:5000/predict", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+      document.getElementById("result").innerText = "🌾 Best Crop: " + result.crop;
+    });
+  </script>
+</body>
+</html>
